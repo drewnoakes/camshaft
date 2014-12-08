@@ -18,7 +18,7 @@ set(TEST_SOURCES
 ## Target for running tests (custom targets are always run)
 #
 add_custom_target(camshaft-runtests
-    ALL ./unittests
+    ALL ./camshaft-unittests
     DEPENDS camshaft-unittests)
 
 #
