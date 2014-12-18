@@ -4,6 +4,7 @@ set(TEST_SOURCES
     unittests.cc
 
     any_test.cc
+    graphs_test.cc
     observable_test.cc
     uuid_test.cc
 
