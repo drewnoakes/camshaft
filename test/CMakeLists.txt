@@ -6,6 +6,7 @@ set(TEST_SOURCES
     any_test.cc
     graphs_test.cc
     observable_test.cc
+    string_test.cc
     uuid_test.cc
 
     ../src/demangle.cc
