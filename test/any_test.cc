@@ -34,7 +34,9 @@ TEST(AnyTest, accessValueByReference)
 
   // Verify that the referenced value is identical over multiple casts
   int i = 1;
-  a = i;
+  a = i; // copies value into 'any' container
+
+  // multiple calls should return same reference
   int* p1 = &any_cast<int&>(a);
   int* p2 = &any_cast<int&>(a);
 
