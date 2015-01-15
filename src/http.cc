@@ -8,8 +8,8 @@ using namespace std;
 
 size_t callback(void* contents, size_t size, size_t nmemb, void* user)
 {
-  auto chunk = reinterpret_cast<char*>(contents);
-  auto buffer = reinterpret_cast<vector<char>*>(user);
+  auto chunk = static_cast<char*>(contents);
+  auto buffer = static_cast<vector<char>*>(user);
 
   size_t priorSize = buffer->size();
   size_t sizeIncrease = size * nmemb;
