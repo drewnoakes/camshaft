@@ -2,16 +2,15 @@
 
 #include <lwsxx/websocketbuffer.hh>
 
+typedef unsigned char byte;
+
 namespace camshaft
 {
-  namespace lwsxx
+  class WebSocketJsonBuffer : public lwsxx::WebSocketBuffer
   {
-    class WebSocketJsonBuffer : public ::lwsxx::WebSocketBuffer
-    {
-    public:
-      inline void Put(byte b) { append(b); }
+  public:
+    inline void Put(byte b) { append(b); }
 
-      void Flush() {};
-    };
-  }
+    void Flush() {};
+  };
 }
