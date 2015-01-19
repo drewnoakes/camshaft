@@ -35,16 +35,4 @@ namespace camshaft
   {
     return trim_end(trim_front(str));
   }
-
-  inline std::string& remove_non_ascii(std::string& str)
-  {
-    str.erase(
-      std::remove_if(
-        str.begin(),
-        str.end(),
-        [](const char c) { return c < 0 || c > 127; }
-      ),
-      str.end());
-    return str;
-  }
 }
