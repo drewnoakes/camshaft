@@ -64,15 +64,3 @@ TEST(StringTest, trimFront)
   str = "\tHELLO WORLD\t";
   EXPECT_EQ("HELLO WORLD\t", trim_front(str));
 }
-
-
-TEST(StringTest, removeNonAscii)
-{
-  string str;
-
-  str = "HELLO WORLD";
-  EXPECT_EQ("HELLO WORLD", remove_non_ascii(str));
-
-  str = u8"HELLO\u00DAWORLD";
-  EXPECT_EQ("HELLOWORLD", remove_non_ascii(str));
-}
