@@ -3,17 +3,37 @@
 #include <string>
 #include <rapidjson/document.h>
 
-inline const char* getJsonString(const rapidjson::Value& value, const char* memberName)
+template<typename Encoding>
+const char* getString(const rapidjson::GenericValue<Encoding>& value, const char* memberName, bool allowNull = true)
 {
   auto member = value.FindMember(memberName);
   if (member == value.MemberEnd())
     throw std::runtime_error(std::string("Expected member name: ") + memberName);
+  if (member->value.IsNull())
+  {
+    if (allowNull)
+      return nullptr;
+    throw std::runtime_error(std::string("Member '") + memberName + "' cannot be null");
+  }
   if (!member->value.IsString())
     throw std::runtime_error(std::string("Member '") + memberName + "' must be a string");
   return member->value.GetString();
 }
 
-inline const rapidjson::Value& getObject(const rapidjson::Value& value, const char* memberName)
+template<typename Encoding>
+bool tryGetString(const rapidjson::GenericValue<Encoding>& value, const char* memberName, std::string& out)
+{
+  auto member = value.FindMember(memberName);
+  if (member == value.MemberEnd())
+    return false;
+  if (!member->value.IsString())
+    return false;
+  out = member->value.GetString();
+  return true;
+}
+
+template<typename Encoding>
+const rapidjson::GenericValue<Encoding>& getObject(const rapidjson::GenericValue<Encoding>& value, const char* memberName)
 {
   auto member = value.FindMember(memberName);
   if (member == value.MemberEnd())
@@ -23,7 +43,8 @@ inline const rapidjson::Value& getObject(const rapidjson::Value& value, const ch
   return member->value;
 }
 
-inline bool tryGetObject(const rapidjson::Value& value, const char* memberName, const rapidjson::Value** out)
+template<typename Encoding>
+bool tryGetObject(const rapidjson::GenericValue<Encoding>& value, const char* memberName, const rapidjson::GenericValue<Encoding>** out)
 {
   auto member = value.FindMember(memberName);
   if (member == value.MemberEnd())
@@ -34,7 +55,19 @@ inline bool tryGetObject(const rapidjson::Value& value, const char* memberName, 
   return true;
 }
 
-inline bool tryGetArray(const rapidjson::Value& value, const char* memberName, const rapidjson::Value** out)
+template<typename Encoding>
+const rapidjson::GenericValue<Encoding>& getArray(const rapidjson::GenericValue<Encoding>& value, const char* memberName)
+{
+  auto member = value.FindMember(memberName);
+  if (member == value.MemberEnd())
+    throw std::runtime_error(std::string("Expected member name: ") + memberName);
+  if (!member->value.IsArray())
+    throw std::runtime_error(std::string("Member '") + memberName + "' must be an array");
+  return member->value;
+}
+
+template<typename Encoding>
+bool tryGetArray(const rapidjson::GenericValue<Encoding>& value, const char* memberName, const rapidjson::GenericValue<Encoding>** out)
 {
   auto member = value.FindMember(memberName);
   if (member == value.MemberEnd())
@@ -45,7 +78,25 @@ inline bool tryGetArray(const rapidjson::Value& value, const char* memberName, c
   return true;
 }
 
-inline double getDouble(const rapidjson::Value& value, const char* memberName)
+template<typename Encoding>
+std::vector<std::string> getStringArray(const rapidjson::GenericValue<Encoding>& value, const char* memberName)
+{
+  std::vector<std::string> values;
+  auto member = value.FindMember(memberName);
+  if (member != value.MemberEnd() && member->value.IsArray())
+  {
+    for (auto it = member->value.Begin(); it != member->value.End(); it++)
+    {
+      // NOTE no coercion here to string
+      if (it->IsString())
+        values.push_back(it->GetString());
+    }
+  }
+  return move(values);
+}
+
+template<typename Encoding>
+double getDouble(const rapidjson::GenericValue<Encoding>& value, const char* memberName)
 {
   auto member = value.FindMember(memberName);
   if (member == value.MemberEnd())
@@ -55,7 +106,8 @@ inline double getDouble(const rapidjson::Value& value, const char* memberName)
   return member->value.GetDouble();
 }
 
-inline bool tryGetDouble(const rapidjson::Value& value, const char* memberName, double& out)
+template<typename Encoding>
+bool tryGetDouble(const rapidjson::GenericValue<Encoding>& value, const char* memberName, double& out)
 {
   auto member = value.FindMember(memberName);
   if (member == value.MemberEnd())
@@ -66,7 +118,8 @@ inline bool tryGetDouble(const rapidjson::Value& value, const char* memberName, 
   return true;
 }
 
-inline int getInt(const rapidjson::Value& value, const char* memberName)
+template<typename Encoding>
+int getInt(const rapidjson::GenericValue<Encoding>& value, const char* memberName)
 {
   auto member = value.FindMember(memberName);
   if (member == value.MemberEnd())
@@ -76,7 +129,8 @@ inline int getInt(const rapidjson::Value& value, const char* memberName)
   return member->value.GetInt();
 }
 
-inline long getLong(const rapidjson::Value& value, const char* memberName)
+template<typename Encoding>
+long getLong(const rapidjson::GenericValue<Encoding>& value, const char* memberName)
 {
   auto member = value.FindMember(memberName);
   if (member == value.MemberEnd())
@@ -84,25 +138,4 @@ inline long getLong(const rapidjson::Value& value, const char* memberName)
   if (!member->value.IsInt64())
     throw std::runtime_error(std::string("Member '") + memberName + "' must be a long");
   return member->value.GetInt64();
-}
-
-inline const char* getString(const rapidjson::Value& value, const char* memberName)
-{
-  auto member = value.FindMember(memberName);
-  if (member == value.MemberEnd())
-    throw std::runtime_error(std::string("Expected member name: ") + memberName);
-  if (!member->value.IsString())
-    throw std::runtime_error(std::string("Member '") + memberName + "' must be a string");
-  return member->value.GetString();
-}
-
-inline bool tryGetString(const rapidjson::Value& value, const char* memberName, std::string& out)
-{
-  auto member = value.FindMember(memberName);
-  if (member == value.MemberEnd())
-    return false;
-  if (!member->value.IsString())
-    return false;
-  out = member->value.GetString();
-  return true;
 }
