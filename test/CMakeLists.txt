@@ -7,10 +7,12 @@ set(TEST_SOURCES
     graphs_test.cc
     observable_test.cc
     string_test.cc
+    url_test.cc
     uuid_test.cc
 
     ../src/demangle.cc
     ../src/observable.cc
+    ../src/url.cc
     ../src/uuid.cc
 
     google-test/src/gtest-all.cc
