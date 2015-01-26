@@ -130,6 +130,18 @@ int getInt(const rapidjson::GenericValue<Encoding>& value, const char* memberNam
 }
 
 template<typename Encoding>
+bool tryGetInt(const rapidjson::GenericValue<Encoding>& value, const char* memberName, int& out)
+{
+  auto member = value.FindMember(memberName);
+  if (member == value.MemberEnd())
+    return false;
+  if (!member->value.IsInt())
+    return false;
+  out = member->value.GetInt();
+  return true;
+}
+
+template<typename Encoding>
 long getLong(const rapidjson::GenericValue<Encoding>& value, const char* memberName)
 {
   auto member = value.FindMember(memberName);
