@@ -29,7 +29,7 @@ add_custom_target(camshaft-runtests
 ## Include directories
 #
 include_directories(SYSTEM google-test/include)
-include_directories(google-test)
+include_directories(SYSTEM google-test)
 
 #
 ## Target
