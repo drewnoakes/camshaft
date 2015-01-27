@@ -52,11 +52,11 @@ TEST(ObservableTest, observableUtil)
   EXPECT_EQ(0, Observable::assignCount);
 
   // Destructor
-  Observable::reset();
   {
     Observable o5;
+    Observable::reset();
   }
-  EXPECT_EQ(1, Observable::ctorCount);
+  EXPECT_EQ(0, Observable::ctorCount);
   EXPECT_EQ(1, Observable::dtorCount);
   EXPECT_EQ(0, Observable::copyCount);
   EXPECT_EQ(0, Observable::moveCount);
