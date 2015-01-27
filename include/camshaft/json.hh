@@ -8,7 +8,11 @@ const char* getString(const rapidjson::GenericValue<Encoding>& value, const char
 {
   auto member = value.FindMember(memberName);
   if (member == value.MemberEnd())
+  {
+    if (allowNull)
+      return nullptr;
     throw std::runtime_error(std::string("Expected member name: ") + memberName);
+  }
   if (member->value.IsNull())
   {
     if (allowNull)
