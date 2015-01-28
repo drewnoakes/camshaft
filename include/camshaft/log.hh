@@ -22,6 +22,7 @@ inline std::ostream& operator<<(std::ostream &stream, std::vector<std::string> c
 
 enum class LogLevel
 {
+  Trace,
   Verbose,
   Info,
   Warning,
@@ -36,12 +37,14 @@ public:
   static LogLevel minLevel;
 
   static log level(LogLevel level) { return log(level); }
+  static log trace()   { return log(LogLevel::Trace); }
   static log info()    { return log(LogLevel::Info); }
   static log verbose() { return log(LogLevel::Verbose); }
   static log warning() { return log(LogLevel::Warning); }
   static log error()   { return log(LogLevel::Error); }
 
   static log level(std::string const& scope, LogLevel level) { return log(scope, level); }
+  static log trace(std::string const& scope)   { return log(scope, LogLevel::Trace); }
   static log info(std::string const& scope)    { return log(scope, LogLevel::Info); }
   static log verbose(std::string const& scope) { return log(scope, LogLevel::Verbose); }
   static log warning(std::string const& scope) { return log(scope, LogLevel::Warning); }
