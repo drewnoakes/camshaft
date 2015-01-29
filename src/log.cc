@@ -7,6 +7,7 @@
 using namespace std;
 
 LogLevel log::minLevel = LogLevel::Verbose;
+LogRedirects log::redirects;
 
 void writeLogTimestamp(ostream& o)
 {
@@ -57,7 +58,7 @@ log::~log()
   }
 
   auto& ostream = d_level == LogLevel::Error ? cerr : cout;
-  bool isRedirected = d_level == LogLevel::Error ? isStdErrRedirected (): isStdOutRedirected();
+  bool isRedirected = d_level == LogLevel::Error ? redirects.isStdErrRedirected : redirects.isStdOutRedirected;
 
   if (isRedirected)
   {
@@ -80,14 +81,8 @@ log::~log()
   }
 }
 
-bool log::isStdOutRedirected()
+LogRedirects::LogRedirects()
 {
-  static bool isStdOutRedirected = isatty(STDOUT_FILENO) == 0;
-  return isStdOutRedirected;
-}
-
-bool log::isStdErrRedirected()
-{
-  static bool isStdErrRedirected = isatty(STDERR_FILENO) == 0;
-  return isStdErrRedirected;
+  isStdOutRedirected = isatty(STDOUT_FILENO) == 0;
+  isStdErrRedirected = isatty(STDERR_FILENO) == 0;
 }

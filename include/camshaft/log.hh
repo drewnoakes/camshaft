@@ -29,12 +29,21 @@ enum class LogLevel
   Error
 };
 
+struct LogRedirects
+{
+  bool isStdOutRedirected;
+  bool isStdErrRedirected;
+
+  LogRedirects();
+};
+
 /** A very minimal logging framework to control console output.
 */
 class log
 {
 public:
   static LogLevel minLevel;
+  static LogRedirects redirects;
 
   static log level(LogLevel level) { return log(level); }
   static log trace()   { return log(LogLevel::Trace); }
@@ -49,9 +58,6 @@ public:
   static log verbose(std::string const& scope) { return log(scope, LogLevel::Verbose); }
   static log warning(std::string const& scope) { return log(scope, LogLevel::Warning); }
   static log error(std::string const& scope)   { return log(scope, LogLevel::Error); }
-
-  static bool isStdOutRedirected();
-  static bool isStdErrRedirected();
 
   log(log&& log)
     : d_scope(log.d_scope),
