@@ -1,7 +1,12 @@
 #pragma once
 
+#include <stdexcept>
 #include <string>
+#include <vector>
+
 #include <rapidjson/document.h>
+
+void loadJsonFile(const std::string& path, rapidjson::Document& doc);
 
 template<typename Encoding>
 const char* getString(const rapidjson::GenericValue<Encoding>& value, const char* memberName, bool allowNull = true)
