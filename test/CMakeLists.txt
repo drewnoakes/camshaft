@@ -8,6 +8,7 @@ set(TEST_SOURCES
     observable_test.cc
     shared_ptr_test.cc
     string_test.cc
+    unique_ptr_test.cc
     url_test.cc
     uuid_test.cc
 
