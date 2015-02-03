@@ -6,6 +6,8 @@
 #include <rapidjson/writer.h>
 
 #include <lwsxx/websocketsession.hh>
+#include <lwsxx/http.hh>
+
 #include <camshaft/log.hh>
 
 using namespace camshaft;
