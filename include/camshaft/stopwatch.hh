@@ -13,9 +13,9 @@ public:
 
   void reset() { _mark = makeMark(); }
 
-  double seconds() const { return (mark() - _mark) * 1e6; }
-  double millis() const { return (mark() - _mark) * 1e3; }
-  double micros() const { return mark() - _mark; }
+  double seconds() const { return (makeMark() - _mark) / 1e6; }
+  double millis() const { return (makeMark() - _mark) / 1e3; }
+  double micros() const { return makeMark() - _mark; }
 
   inline std::string describe() const { return describeSeconds(seconds()); }
 
