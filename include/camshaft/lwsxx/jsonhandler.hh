@@ -52,7 +52,7 @@ namespace camshaft
             writer.Int((int)ex.httpStatus());
           }
           writer.EndObject();
-          T::send(buffer);
+          session->send(buffer);
         }
         catch (std::exception& ex)
         {
@@ -64,7 +64,7 @@ namespace camshaft
             writer.String(ex.what());
           }
           writer.EndObject();
-          T::send(buffer);
+          session->send(buffer);
         }
       }
     }
