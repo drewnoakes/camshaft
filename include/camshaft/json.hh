@@ -160,3 +160,14 @@ long getLong(const rapidjson::GenericValue<Encoding>& value, const char* memberN
     throw std::runtime_error(std::string("Member '") + memberName + "' must be a long");
   return member->value.GetInt64();
 }
+
+template<typename Encoding>
+bool getBool(const rapidjson::GenericValue<Encoding>& value, const char* memberName)
+{
+  auto member = value.FindMember(memberName);
+  if (member == value.MemberEnd())
+    throw std::runtime_error(std::string("Expected member name: ") + memberName);
+  if (!member->value.IsBool())
+    throw std::runtime_error(std::string("Member '") + memberName + "' must be a bool");
+  return member->value.GetBool();
+}
